@@ -1,0 +1,27 @@
+# 1. Update kubeconfig to connect to EKS
+- name: Update kubeconfig for EKS
+  run: |
+    aws eks update-kubeconfig \
+      --name my-eks-cluster \
+      --region us-east-1
+
+# 2. Deploy new image to Kubernetes
+- name: Deploy New Image to Kubernetes
+  run: |
+    kubectl set image deployment/nodejs-api \
+      nodejs-api=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/nodejs-api:${{ github.sha }} \
+      --namespace production
+
+# 3. Verify rollout is healthy
+- name: Verify Deployment Rollout
+  run: |
+    kubectl rollout status deployment/nodejs-api \
+      --namespace production \
+      --timeout=120s
+
+# 4. Rollback automatically if deployment fails
+- name: Rollback on Failure
+  if: failure()
+  run: |
+    kubectl rollout undo deployment/nodejs-api \
+      --namespace production
