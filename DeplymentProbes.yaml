@@ -1,0 +1,24 @@
+spec:
+  containers:
+  - name: nodejs-api
+    image: myrepo/nodejs-api:v1.0.0
+    ports:
+    - containerPort: 3000
+
+    # Readiness probe: determines when pod is ready to accept traffic
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 3000
+      initialDelaySeconds: 25
+      periodSeconds: 5
+      failureThreshold: 3
+
+    # Liveness probe: determines if pod is alive or should be restarted
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: 3000
+      initialDelaySeconds: 40
+      periodSeconds: 10
+      failureThreshold: 3
