@@ -1,0 +1,12 @@
+env:
+- name: API_BASE_URL
+  valueFrom:
+    configMapKeyRef:
+      name: app-config
+      key: API_BASE_URL
+
+- name: DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: db-secret
+      key: DB_PASSWORD
