@@ -1,0 +1,4 @@
+Application: myapp
+Environment: Dev
+Version: 1.0
+Status: Deployment Successful
